@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <title>Dark login template</title>
+    <style>
+        :root {
+            --font-size: 0.8rem;
+            --title-font-size: 1.4rem;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: linear-gradient(to left, #58595f, #2e3035);
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wraper {
+            width: 65%;
+            height: 75%;
+            background: #2f3136;
+            border-radius: 7px;
+            display: flex;
+            padding: 0.8rem;
+            box-shadow: 4px 4px 12px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-container__main {
+            width: 100%;
+            height: 100%;
+            display: block;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .image--container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            border-radius: 4px;
+        }
+
+        .image--container {
+            background: url('https://raw.githubusercontent.com/muthhukumar/dark-login-template/main/images/productivity.jpg');
+        }
+
+        .login-container__title {
+            color: white;
+            font-size: var(--title-font-size);
+            font-weight: bolder;
+            text-align: center;
+            padding: 0.3rem;
+            align-items: center;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+        }
+
+        .login-form__input-email label,
+        .login-form__input-email input {
+            display: block;
+        }
+
+        .login-form__input-password label,
+        .login-form__input-password input {
+            display: block;
+        }
+
+        .login-form__input-email label,
+        .login-form__input-password label {
+            text-transform: uppercase;
+            font-size: var(--font-size);
+            font-weight: bold;
+            color: rgb(155, 152, 152);
+        }
+
+        .login-form__input-password input,
+        .login-form__input-email input {
+            margin-top: 0.4rem;
+            width: 100%;
+            height: 2.6rem;
+            border-radius: 4px;
+            outline: none;
+            border: 1.2px solid #202225;
+            background: #393c42;
+            color: #ccc;
+            padding: 0.5rem;
+        }
+
+        .login-form__input-password input:hover,
+        .login-form__input-email input:hover {
+            border: 1.2px solid black;
+        }
+
+        .login-form__input-password input:active,
+        .login-form__input-email input:active,
+        .login-form__input-password input:focus,
+        .login-form__input-email input:focus {
+            border: 1.6px solid #7289da;
+        }
+
+        .login-form__input-email {
+            margin-bottom: 2rem;
+        }
+
+        .forgot-password {
+            margin-top: 0.6rem;
+        }
+
+        .forgot-password a {
+            color: #7289da;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .login-form__button {
+            margin-top: 3.6rem;
+            width: 100%;
+            height: 2.6rem;
+            border-radius: 4px;
+            background: #7289da;
+            color: white;
+            font-weight: bold;
+            border: none;
+        }
+
+        .login-form__button:active,
+        .login-form__button:hover {
+            cursor: pointer;
+            outline: none;
+            background: #5b77dd;
+        }
+
+        .newuser__sign-in {
+            color: rgb(155, 152, 152);
+            font-size: 1rem;
+            margin-top: 0.6rem;
+            font-weight: 500;
+        }
+
+        .newuser__sign-in a {
+            text-decoration: none;
+            color: #5670ce;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wraper">
+            <div class="image--container"></div>
+            <div class="login-container__main">
+                <div class="login-container__title">login</div>
+                <form class="login-form" action="{{ url_for('login') }}" method="POST">
+                    <div class="login-form__input-email">
+                        <label for="email">email</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="login-form__input-password">
+                        <label for="password">password</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="forgot-password"><a href="#">Forgot Password?</a></div>
+                    <button class="login-form__button" type="submit">LOGIN</button>
+                    <div class="newuser__sign-in">Need an account?<a href="#"> Sign up</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
